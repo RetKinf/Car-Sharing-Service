@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users-table
+      author: retkinf
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "admin@mail.com"}
+              - column: {name: password, value: "$2a$10$rnjsWIrqAG7b7MjPXR1Kfu52XkUdnQ0Fhq4sIzc9oCBeyrmofh1PW"} #Secure123
+              - column: {name: first_name, value: "Vladlen"}
+              - column: {name: last_name, value: "Soloviov"}
