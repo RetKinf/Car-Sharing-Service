@@ -34,6 +34,7 @@ public class PaymentRepositoryTest {
             "classpath:database/payments/remove-all-payments.sql",
             "classpath:database/rentals/remove-all-rentals.sql",
             "classpath:database/cars/remove-all-cars.sql",
+            "classpath:database/users-roles/remove-john-roles.sql",
             "classpath:database/users/remove-john-from-users.sql"
     }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void findByUserId_WithValidData_ReturnListPayment() {
