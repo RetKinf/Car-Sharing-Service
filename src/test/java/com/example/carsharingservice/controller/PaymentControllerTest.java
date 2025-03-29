@@ -2,16 +2,25 @@ package com.example.carsharingservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.carsharingservice.api.stipe.StripeService;
 import com.example.carsharingservice.dto.payment.CreatePaymentRequestDto;
 import com.example.carsharingservice.dto.payment.PaymentDto;
+import com.example.carsharingservice.model.Payment;
+import com.example.carsharingservice.model.PaymentStatus;
 import com.example.carsharingservice.model.PaymentType;
+import com.example.carsharingservice.model.Rental;
+import com.example.carsharingservice.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -20,6 +29,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -35,7 +47,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 public class PaymentControllerTest {
     protected static MockMvc mockMvc;
-    private static final BigDecimal PAYMENT_AMOUNT = BigDecimal.valueOf(100L);
+    private static final BigDecimal PAYMENT_AMOUNT = BigDecimal.valueOf(100);
     private static final String PAYMENT_SESSION_ID = "Session ID 1234";
     @Autowired
     private ObjectMapper objectMapper;

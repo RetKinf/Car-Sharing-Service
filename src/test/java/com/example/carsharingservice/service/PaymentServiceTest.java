@@ -11,7 +11,7 @@ import com.example.carsharingservice.api.stipe.StripeService;
 import com.example.carsharingservice.context.PaymentContext;
 import com.example.carsharingservice.dto.payment.CreatePaymentRequestDto;
 import com.example.carsharingservice.dto.payment.PaymentDto;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.mapper.PaymentMapper;
 import com.example.carsharingservice.model.Payment;
 import com.example.carsharingservice.model.PaymentStatus;
@@ -90,7 +90,7 @@ public class PaymentServiceTest {
         Long userId = 999L;
         when(userService.existsById(userId)).thenReturn(false);
         Exception exception = assertThrows(
-                EntityNotFoundException.class,
+                DataNotFoundException.class,
                 () -> paymentService.findByUserId(userId)
         );
         String expected = String.format("User with id %s not found", userId);

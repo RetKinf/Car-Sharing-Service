@@ -5,7 +5,7 @@ import com.example.carsharingservice.dto.rental.CreateRentalRequestDto;
 import com.example.carsharingservice.dto.rental.RentalRequestDto;
 import com.example.carsharingservice.dto.rental.RentalResponseDto;
 import com.example.carsharingservice.dto.rental.RentalReturnDateDto;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.exception.InvalidDataException;
 import com.example.carsharingservice.mapper.RentalMapper;
 import com.example.carsharingservice.model.Car;
@@ -56,7 +56,7 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public List<RentalResponseDto> findByUserIdAndActive(RentalRequestDto rentalRequestDto) {
         if (!userService.existsById(rentalRequestDto.userId())) {
-            throw new EntityNotFoundException(
+            throw new DataNotFoundException(
                     String.format("User with id %s not found", rentalRequestDto.userId())
             );
         }
@@ -78,7 +78,7 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public RentalResponseDto returnCar(RentalReturnDateDto requestDto, Long id) {
         Rental rental = rentalRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Rental with id %s not found", id))
+                () -> new DataNotFoundException(String.format("Rental with id %s not found", id))
         );
         if (!rental.isActive()) {
             throw new InvalidDataException(String.format("Rental with id %s is not active", id));
@@ -97,7 +97,7 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public Rental findRentalById(Long id) {
         return rentalRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Rental with id %s not found", id))
+                () -> new DataNotFoundException(String.format("Rental with id %s not found", id))
         );
     }
 

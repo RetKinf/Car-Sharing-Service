@@ -2,14 +2,20 @@ package com.example.carsharingservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.carsharingservice.api.telegram.TelegramNotificationService;
 import com.example.carsharingservice.dto.rental.CreateRentalRequestDto;
 import com.example.carsharingservice.dto.rental.RentalRequestDto;
 import com.example.carsharingservice.dto.rental.RentalResponseDto;
+import com.example.carsharingservice.service.impl.RentalServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,6 +26,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -32,12 +42,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class RentalControllerTest {
     protected static MockMvc mockMvc;
     private static final LocalDate RENTAL_RETURN_DATE = LocalDate.now().plusDays(2);
     @Autowired
     private ObjectMapper objectMapper;
+    @Mock
+    private TelegramNotificationService notificationService;
 
     @BeforeAll
     static void beforeAll(
@@ -106,6 +119,8 @@ public class RentalControllerTest {
                 carId
         );
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
+        doNothing().when(notificationService)
+                .sendMessage(anyString());
         MvcResult result = mockMvc.perform(
                         post("/rentals")
                                 .content(jsonRequest)
@@ -119,6 +134,7 @@ public class RentalControllerTest {
         assertEquals(LocalDate.now(), actual.getRentalDate());
         assertEquals(RENTAL_RETURN_DATE, actual.getReturnDate());
         assertEquals(carId, actual.getCar().id());
+        verify(notificationService).sendMessage(anyString());
     }
 
     @WithMockUser(username = "admin", authorities = {"MANAGER"})

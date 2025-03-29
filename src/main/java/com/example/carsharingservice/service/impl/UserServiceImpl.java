@@ -5,7 +5,7 @@ import com.example.carsharingservice.dto.user.UserRegistrationRequestDto;
 import com.example.carsharingservice.dto.user.UserRequestDto;
 import com.example.carsharingservice.dto.user.UserResponseDto;
 import com.example.carsharingservice.dto.user.UserResponseWithoutRolesDto;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.exception.RegistrationException;
 import com.example.carsharingservice.mapper.UserMapper;
 import com.example.carsharingservice.model.Role;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toModel(requestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName(RoleName.CUSTOMER).orElseThrow(
-                () -> new EntityNotFoundException(
+                () -> new DataNotFoundException(
                         String.format("Role %s not found", RoleName.CUSTOMER)
                 )
         );
@@ -53,12 +53,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateRole(RoleRequestDto requestDto, Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User with id %s not found", id))
+                () -> new DataNotFoundException(String.format("User with id %s not found", id))
         );
         Set<Role> roles = new HashSet<>();
         for (RoleName roleName : requestDto.roleName()) {
             roles.add(roleRepository.findByName(roleName).orElseThrow(
-                    () -> new EntityNotFoundException(String.format("Role %s not found", roleName))
+                    () -> new DataNotFoundException(String.format("Role %s not found", roleName))
                     )
             );
         }
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
             Authentication authentication
     ) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-                () -> new EntityNotFoundException(String.format(
+                () -> new DataNotFoundException(String.format(
                         "User with email %s not found",
                         authentication.getName())
                 )
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser(Authentication authentication) {
         return userRepository.findByEmail(authentication.getName()).orElseThrow(
-                () -> new EntityNotFoundException(
+                () -> new DataNotFoundException(
                         String.format("User with email %s not found", authentication.getName())
                 )
         );

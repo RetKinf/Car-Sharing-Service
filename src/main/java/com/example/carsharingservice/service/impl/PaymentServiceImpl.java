@@ -5,7 +5,7 @@ import com.example.carsharingservice.api.telegram.TelegramNotificationService;
 import com.example.carsharingservice.context.PaymentContext;
 import com.example.carsharingservice.dto.payment.CreatePaymentRequestDto;
 import com.example.carsharingservice.dto.payment.PaymentDto;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.exception.InvalidDataException;
 import com.example.carsharingservice.mapper.PaymentMapper;
 import com.example.carsharingservice.model.Payment;
@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public List<PaymentDto> findByUserId(Long id) {
         if (!userService.existsById(id)) {
-            throw new EntityNotFoundException(
+            throw new DataNotFoundException(
                     String.format("User with id %s not found", id)
             );
         }
@@ -78,7 +78,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void completePayment(String sessionId) {
         Payment payment = paymentRepository.findBySessionId(sessionId).orElseThrow(
-                () -> new EntityNotFoundException(
+                () -> new DataNotFoundException(
                         String.format("Payment with id %s not found", sessionId)
                 )
         );

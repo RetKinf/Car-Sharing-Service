@@ -36,8 +36,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, headers, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleNullPointerExceptions(EntityNotFoundException ex) {
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<String> handleNullPointerExceptions(DataNotFoundException ex) {
         return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
     }
 

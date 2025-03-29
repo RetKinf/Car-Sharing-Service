@@ -14,7 +14,7 @@ import com.example.carsharingservice.dto.user.UserRegistrationRequestDto;
 import com.example.carsharingservice.dto.user.UserRequestDto;
 import com.example.carsharingservice.dto.user.UserResponseDto;
 import com.example.carsharingservice.dto.user.UserResponseWithoutRolesDto;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.exception.RegistrationException;
 import com.example.carsharingservice.mapper.UserMapper;
 import com.example.carsharingservice.model.Role;
@@ -165,7 +165,7 @@ public class UserServiceTest {
         RoleRequestDto requestDto = new RoleRequestDto(Set.of(RoleName.MANAGER));
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
         Exception exception = assertThrows(
-                EntityNotFoundException.class,
+                DataNotFoundException.class,
                 () -> userService.updateRole(requestDto, userId)
         );
         String expected = String.format("User with id %s not found", userId);
@@ -206,7 +206,7 @@ public class UserServiceTest {
         when(authentication.getName()).thenReturn(USER_EMAIL);
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.empty());
         Exception exception = assertThrows(
-                EntityNotFoundException.class,
+                DataNotFoundException.class,
                 () -> userService.getCurrentUserDto(authentication)
         );
         String expected = String.format("User with email %s not found", USER_EMAIL);

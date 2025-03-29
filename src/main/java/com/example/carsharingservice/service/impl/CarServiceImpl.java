@@ -4,7 +4,7 @@ import com.example.carsharingservice.dto.car.CarRequestDto;
 import com.example.carsharingservice.dto.car.CarResponseDto;
 import com.example.carsharingservice.dto.car.CreateCarRequestDto;
 import com.example.carsharingservice.exception.AlreadyExistsException;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.exception.InvalidDataException;
 import com.example.carsharingservice.mapper.CarMapper;
 import com.example.carsharingservice.model.Car;
@@ -51,7 +51,7 @@ public class CarServiceImpl implements CarService {
 
     public CarResponseDto update(CarRequestDto carRequestDto, Long id) {
         Car car = carRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Car with id %s not found", id))
+                () -> new DataNotFoundException(String.format("Car with id %s not found", id))
         );
         if (carRequestDto.getDailyFee() != null) {
             car.setDailyFee(carRequestDto.getDailyFee());
@@ -83,7 +83,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car findCarById(Long id) {
         return carRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Car with id %s not found", id))
+                () -> new DataNotFoundException(String.format("Car with id %s not found", id))
         );
     }
 }

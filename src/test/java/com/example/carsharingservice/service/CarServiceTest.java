@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 import com.example.carsharingservice.dto.car.CarRequestDto;
 import com.example.carsharingservice.dto.car.CarResponseDto;
 import com.example.carsharingservice.dto.car.CreateCarRequestDto;
-import com.example.carsharingservice.exception.EntityNotFoundException;
+import com.example.carsharingservice.exception.DataNotFoundException;
 import com.example.carsharingservice.exception.InvalidDataException;
 import com.example.carsharingservice.mapper.CarMapper;
 import com.example.carsharingservice.model.Car;
@@ -115,7 +115,7 @@ public class CarServiceTest {
         Long carId = 100L;
         when(carRepository.findById(carId)).thenReturn(Optional.empty());
         Exception exception = assertThrows(
-                EntityNotFoundException.class,
+                DataNotFoundException.class,
                 () -> carService.findCarById(carId)
         );
         String expected = String.format("Car with id %s not found", carId);
@@ -244,7 +244,7 @@ public class CarServiceTest {
     public void findCarById_WithNonExistentCarId_ThrowsEntityNotFoundException() {
         Long carId = 999L;
         when(carRepository.findById(carId)).thenReturn(Optional.empty());
-        Exception exception = assertThrows(EntityNotFoundException.class,
+        Exception exception = assertThrows(DataNotFoundException.class,
                 () -> carService.findCarById(carId)
         );
         String expected = String.format("Car with id %s not found", carId);
