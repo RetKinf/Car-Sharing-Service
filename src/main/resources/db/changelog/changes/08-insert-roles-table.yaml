@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-roles-table
+      author: retkinf
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column: {name: name, value: MANAGER}
+        - insert:
+            tableName: roles
+            columns:
+              - column: {name: name, value: CUSTOMER}

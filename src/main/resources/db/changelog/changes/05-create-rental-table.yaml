@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-rentals-table
+      author: retkinf
+      changes:
+        - createTable:
+            tableName: rentals
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: rental_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: return_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actual_return_date
+                  type: date
+              - column:
+                  name: car_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: bit
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: rentals
+            baseColumnNames: car_id
+            constraintName: fk_rentals_cars
+            referencedTableName: cars
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: rentals
+            baseColumnNames: user_id
+            constraintName: fk_rentals_users
+            referencedTableName: users
+            referencedColumnNames: id
+
+        - sql:
+            sql: |
+              ALTER TABLE rentals
+              ADD CONSTRAINT chk_rental_dates
+              CHECK (
+                return_date > rental_date AND
+                (actual_return_date IS NULL OR actual_return_date >= rental_date)
+              );

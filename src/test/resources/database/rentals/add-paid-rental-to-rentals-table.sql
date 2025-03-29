@@ -1,0 +1,1 @@
+INSERT INTO rentals (id, rental_date, return_date, actual_return_date, car_id, user_id, is_active) VALUES (1, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), 1, 2, false)
