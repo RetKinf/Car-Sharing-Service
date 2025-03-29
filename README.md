@@ -129,6 +129,10 @@ To run this project locally, follow these steps:
        SPRING_LOCAL_PORT=
        SPRING_DOCKER_PORT=
        DEBUG_PORT=
+       STRIPE_API_KEY=
+       TELEGRAM_BOT_TOKEN=
+       TELEGRAM_BOT_USERNAME=
+       TELEGRAM_CHAT_ID=
       ```
 
 4. **Install dependencies using Maven**:
